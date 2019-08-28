@@ -200,7 +200,7 @@ html {
 }
 body {
   color: hsla(0, 0%, 0%, 0.8);
-  font-family: georgia, serif;
+  font-family: georgia, sans-serif;
   font-weight: normal;
   word-wrap: break-word;
   font-kerning: normal;
@@ -619,4 +619,17 @@ pre tt:after {
   html {
     font-size: 100%;
   }
+}
+
+
+
+.btn {
+  padding: 0.5em;
+  border-radius: 4px;
+  border: 1px solid #c7c1c1;
+  background-color: #fffdfd;
+}
+
+.btn:hover {
+  background-color: #f3f3f3;
 }

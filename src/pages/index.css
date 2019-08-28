@@ -1,0 +1,44 @@
+.patient__list {
+    height: 200px;
+    overflow-y: scroll;
+    border: 1px solid #e8e8e8;
+}
+
+.patient__list-item {
+    display: flex;
+    justify-content: space-around;
+}
+
+.patient__creation-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form__field {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 0.25em;
+}
+
+.main-content {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.notification__count {
+    color:blue;
+}
+
+.notification {
+    flex-grow: 2;
+    text-align: center;
+    height: 12em;
+}
+
+.appointments {
+    flex-grow: 1;
+}
+
+.patients {
+    flex-basis: 100%;
+}
