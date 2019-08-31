@@ -10,34 +10,33 @@ import './index.css';
 
 import { createPatient, createAppointment } from '../state/app';
 
-class PatientList extends React.Component {
-  render() {
-    const { patients = [] } = this.props;
-    return (
-      <ul className="patient__list">
-        <li className="patient__list-item">
-          <span>Nombre</span>
-          <span>Fecha de Nacimiento</span>
+function PatientList({ patients = [] }) {
+  return (
+    <ul className="patient__list">
+      <li className="patient__list-item patient_list-heading">
+        <span>Nombre</span>
+        <span>Fecha de Nacimiento</span>
+      </li>
+      {patients.reverse().map(p => (
+        <li className="patient__list-item" key={p._id}>
+          <span>
+            {p.firstName} {p.lastName || '-'}
+          </span>
+          <span>{p.dob || '-'}</span>
         </li>
-        {patients.reverse().map(p => (
-          <li className="patient__list-item" key={p._id}>
-            <span>
-              {p.firstName} {p.lastName || '-'}
-            </span>
-            <span>{p.dob || '-'}</span>
-          </li>
-        ))}
-      </ul>
-    );
-  }
+      ))}
+    </ul>
+  );
 }
 
 PatientList.propTypes = {
   patients: PropTypes.arrayOf(patientType),
 };
 
-class PatientForm extends React.Component {
-  createUser(ev) {
+function PatientForm({ onSubmit }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  function createUser(ev) {
     ev.preventDefault();
     const { firstName, lastName, dob } = ev.target.elements;
     const body = {
@@ -45,26 +44,47 @@ class PatientForm extends React.Component {
       lastName: lastName.value,
       dob: dob.value,
     };
-    this.props.onSubmit(body);
+    ev.target.reset();
+    setIsExpanded(false);
+    onSubmit(body);
   }
 
-  render() {
-    return (
-      <form className="patient__creation-form" onSubmit={this.createUser.bind(this)}>
-        <label className="form__field">
-          Nombre: <input className="line-input" name="firstName" />
-        </label>
-        <label className="form__field">
-          Apellido: <input className="line-input" name="lastName" />
-        </label>
-        <label className="form__field">
-          Fecha de Nacimiento:{' '}
-          <input className="line-input" type="date" name="dob" defaultValue={new Date()} />
-        </label>
-        <button type="submit">Create nuevo paciente</button>
-      </form>
-    );
+  function expandForm() {
+    setIsExpanded(!isExpanded);
   }
+
+  return (
+    <form className="patient__creation-form" onSubmit={createUser}>
+      <button className="btn" onClick={expandForm} type="button">
+        Crear nuevo paciente
+      </button>
+      {isExpanded && (
+        <>
+          <div className="form__field">
+            <label htmlFor="firstName">Nombre:</label>
+            <input className="line-input" id="firstName" name="firstName" required autoFocus />
+          </div>
+          <div className="form__field">
+            <label htmlFor="lastName">Apellido:</label>
+            <input className="line-input" id="lastName" name="lastName" />
+          </div>
+          <div className="form__field">
+            <label htmlFor="dob">Fecha de Nacimiento:</label>
+            <input
+              className="line-input"
+              id="dob"
+              type="date"
+              name="dob"
+              defaultValue={new Date()}
+            />
+          </div>
+          <button className="btn" type="submit">
+            Crear paciente
+          </button>
+        </>
+      )}
+    </form>
+  );
 }
 PatientForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
@@ -82,7 +102,8 @@ function AppointmentForm({ patients, onSubmit }) {
       description: description.value,
       time: time.value,
     };
-    console.log(body);
+    ev.target.reset();
+    setIsExpanded(false);
     onSubmit(body);
   }
 
@@ -102,43 +123,49 @@ function AppointmentForm({ patients, onSubmit }) {
         </button>
       ) : (
         <>
-          <label className="form__field">
-            Paciente
-            <select className="line-input" id="pasta" name="person">
+          <div className="form__field">
+            <label htmlFor="patient-select-list">Paciente</label>
+            <select className="line-input" id="patient-select-list" name="person" autoFocus>
               {patients.map(p => (
                 <option key={p._id} value={p._id}>
                   {p.lastName}, {p.firstName}
                 </option>
               ))}
             </select>
-          </label>
-          <label className="form__field">
-            Fecha de la cita:{' '}
+          </div>
+          <div className="form__field">
+            <label htmlFor="date">Fecha de la cita: </label>
             <input
               className="line-input"
               required
               type="date"
+              id="date"
               name="date"
               defaultValue={todayString}
               min={todayString}
             />
-          </label>
-          <label className="form__field">
-            Hora de la cita:{' '}
+          </div>
+          <div className="form__field">
+            <label htmlFor="time">Hora de la cita:</label>
             <input
               required
               className="line-input"
+              id="time"
               type="time"
               name="time"
               defaultValue={nowString}
-              min={nowString}
               step="30"
             />
-          </label>
-          <label className="form__field">
-            Fecha de la cita:{' '}
-            <textarea name="description" required placeholder="Cual es el tema de la cita?" />
-          </label>
+          </div>
+          <div className="form__field">
+            <label htmlFor="description">Descripcion:</label>
+            <textarea
+              name="description"
+              id="description"
+              required
+              placeholder="Cual es el tema de la cita?"
+            />
+          </div>
           <button className="btn" type="submit">
             Crear cita
           </button>
@@ -152,19 +179,23 @@ AppointmentForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
 
-function AppointmentList({ appointments }) {
+function AppointmentList({ appointments = [] }) {
   return (
     <ul className="patient__list">
-      <li className="patient__list-item">
+      <li className="patient__list-item patient_list-heading">
         <span>Paciente</span>
         <span>Fecha</span>
         <span>Hora</span>
+        <span>Descripcion</span>
       </li>
       {appointments.map(a => (
         <li className="patient__list-item" key={a._id}>
-          <span>{a.patientId}</span>
+          <span>
+            {a.patient.firstName} {a.patient.lastName}
+          </span>
           <span>{a.date}</span>
           <span>{a.time}</span>
+          <span>{a.description}</span>
         </li>
       ))}
     </ul>
@@ -175,7 +206,7 @@ AppointmentList.propTypes = {
 };
 
 function getClosestAppointment(appointments = []) {
-  return appointments[0];
+  return appointments[0] || {};
 }
 
 const IndexPage = ({ patients = [], appointments = [], createPatient, createAppointment }) => {

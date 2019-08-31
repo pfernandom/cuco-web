@@ -4,9 +4,17 @@
     border: 1px solid #e8e8e8;
 }
 
+.patient_list-heading * {
+    font-weight: 600;
+}
+
 .patient__list-item {
     display: flex;
     justify-content: space-around;
+}
+
+.patient__list-item * {
+    flex-basis: 25%;
 }
 
 .patient__creation-form {
@@ -16,13 +24,22 @@
 
 .form__field {
     display: flex;
-    justify-content: space-between;
     padding-top: 0.25em;
+    padding-bottom: 0.25em;
+}
+
+.form__field * {
+    flex-basis: 100%;
+}
+
+.form__field > label {
+    border-bottom: dashed 1px #d4d3d3;
 }
 
 .main-content {
     display: flex;
     flex-wrap: wrap;
+    align-items: stretch;
 }
 
 .notification__count {
@@ -30,13 +47,17 @@
 }
 
 .notification {
-    flex-grow: 2;
+    flex-basis: 50%;
     text-align: center;
-    height: 12em;
+    background-color: mintcream;
+    border: solid 1px #0a8013;
+    padding: 1em;
+    margin-bottom: 2em;
 }
 
 .appointments {
-    flex-grow: 1;
+    flex-basis: 45%;
+    margin-left: 1em;
 }
 
 .patients {

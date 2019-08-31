@@ -633,3 +633,10 @@ pre tt:after {
 .btn:hover {
   background-color: #f3f3f3;
 }
+
+select, input, textarea {
+  background-color: #ffffff;
+  min-height: 2em;
+  border-radius: 2px;
+  border: solid 1px grey;
+}

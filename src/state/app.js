@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 /* eslint-disable no-case-declarations */
 const API_HOST = 'http://localhost:8080';
 
@@ -99,10 +101,8 @@ export const patientMiddleware = ({ getState, dispatch }) => next => async actio
       dispatch(loadAppointments(appointments));
       break;
     case CREATE_APPOINTMENT:
-      const newAppointment = await postAppointment(action.appointment);
-      const oldAppntList = getState().app.appointments;
-      const newAppntList = [newAppointment, ...oldAppntList];
-      dispatch(loadAppointments(newAppntList));
+      await postAppointment(action.appointment);
+      dispatch(requestAppointments());
   }
   return Promise.resolve(result);
 };
